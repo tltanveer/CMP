@@ -23,7 +23,15 @@ namespace CMP
             services.AddDbContext<CMPContext>(o =>
                 o.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
             );
-
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin", builder =>
+                {
+                    builder.WithOrigins("https://lively-smoke-06c12f810.3.azurestaticapps.net/")
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+            });
             services.AddControllers();
             services.AddTransient<IClientMSARepository, ClientMSARepository>();
 

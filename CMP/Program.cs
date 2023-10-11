@@ -23,9 +23,16 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
 builder.Services.AddTransient<IClientMSARepository, ClientMSARepository>();
 builder.Services.AddTransient<IClientNDARepository, ClientNDARepository>();
 builder.Services.AddTransient<IPartnerNDARepository, PartnerNDARepository>();
-builder.AddCors(Options =>
-{ Options.AddPolicy("AllowSpecificOrigins", builder =>
-{ builder.WithOrigions("https://lively-smoke-06c12f810.3.azurestaticapps.net/").AllowAnyMethod().Allowed})})
+//builder.AddCors(Options =>
+//{
+//    Options.AddPolicy("AllowSpecificOrigins",
+//        builder =>
+//{
+//    builder.WithOrigions("https://lively-smoke-06c12f810.3.azurestaticapps.net/")
+//    .AllowAnyMethod()
+//    .AllowedanyHeader();
+//});
+//});
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme).AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
 var app = builder.Build();
 
@@ -39,7 +46,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseCors("AllowSpecificOrigin");
 
 app.MapControllers();
 
